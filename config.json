@@ -1,0 +1,13 @@
+{
+  "title": "Buildyドキュメンテーション",
+  "tagline": "Documentation for buildy.jp",
+  "image": "buildy.png",
+  "timezone": "Asia/Tokyo",
+  "html": {
+    "theme": "daux-blue"
+  },
+  "ignore": {
+    "files": ["README.md", ".gitignore", "static", "Makefile"],
+    "folders": ["static"]
+  }
+}
