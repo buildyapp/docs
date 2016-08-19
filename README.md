@@ -1,3 +1,3 @@
 # Buildy documentation
 
-* [メディアRSSのドキュメンテーション](./ja/rss.md)
+* [メディアRSSのドキュメンテーション](./01_RSS/documentation.md)
