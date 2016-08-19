@@ -4,11 +4,11 @@
 <!--[if IE 8]>          <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!--[if gt IE 8]><!-->  <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
-    <title>Buildy用のフィード - Buildyドキュメンテーション</title>
+    <title>Buildy用RSSフィードについて - Buildyドキュメンテーション</title>
     <meta name="description" content="Documentation for buildy.jp" />
     <meta name="author" content="I, Me & Myself">
     <meta charset="UTF-8">
-    <link rel="icon" href="themes/daux/img/favicon-blue.png" type="image/x-icon">
+    <link rel="icon" href="../themes/daux/img/favicon-blue.png" type="image/x-icon">
     <!-- Mobile -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +16,9 @@
     <!-- Font -->
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700&subset=latin,cyrillic-ext,cyrillic' rel='stylesheet' type='text/css'>
     <!-- CSS -->
-    <link href='themes/daux/css/theme-blue.min.css' rel='stylesheet' type='text/css'>
+    <link href='../themes/daux/css/theme-blue.min.css' rel='stylesheet' type='text/css'>
             <!-- Tipue Search -->
-        <link href="tipuesearch/tipuesearch.css" rel="stylesheet">
+        <link href="../tipuesearch/tipuesearch.css" rel="stylesheet">
     
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,7 +28,7 @@
     
 
 <div class="Navbar hidden-print">
-    <a class="Navbar__brand" href="index.html">Buildyドキュメンテーション</a>
+    <a class="Navbar__brand" href="../index.html">Buildyドキュメンテーション</a>
 
     <div class="Search">
         <svg class="Search__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 451 451"><path d="M447.05 428l-109.6-109.6c29.4-33.8 47.2-77.9 47.2-126.1C384.65 86.2 298.35 0 192.35 0 86.25 0 .05 86.3.05 192.3s86.3 192.3 192.3 192.3c48.2 0 92.3-17.8 126.1-47.2L428.05 447c2.6 2.6 6.1 4 9.5 4s6.9-1.3 9.5-4c5.2-5.2 5.2-13.8 0-19zM26.95 192.3c0-91.2 74.2-165.3 165.3-165.3 91.2 0 165.3 74.2 165.3 165.3s-74.1 165.4-165.3 165.4c-91.1 0-165.3-74.2-165.3-165.4z"/></svg>
@@ -47,7 +47,7 @@
 
         <div class="Collapsible__content">
             <!-- Navigation -->
-            <ul class='Nav'><li class='Nav__item Nav__item--active'><a href="rss.html">Buildy用のフィード</a></li></ul>
+            <ul class='Nav'><li class='Nav__item Nav__item--open has-children'><a href="#" class="aj-nav folder"><i class="Nav__arrow">&nbsp;</i>RSS</a><ul class='Nav'><li class='Nav__item Nav__item--active'><a href="../RSS/documentation.html">Buildy用RSSフィードについて</a></li><li class='Nav__item '><a href="../RSS/sample.html">サンプルフィード</a></li></ul></li></ul>
 
             <div class="Links">
                 
@@ -64,39 +64,46 @@
             <div class="doc_content">
                 <article class="Page">
             <div class="Page__header">
-            <h1>Buildy用のフィード</h1>
+            <h1>Buildy用RSSフィードについて</h1>
         </div>
     
     <div class="s-content">
-        <p>Buildy用のフィードはRSS 2.0の方言を使用している。
-近日中にAtomに対応する予定なので、もう少々お待ちください。</p>
-<h2 id="page_RSS_20Buildy">RSS 2.0からBuildyのフィードへ</h2>
+        <p>Buildyでは、RSSフィードを用いることで、
+コンテンツをアプリに同期できるようになっています。
+本ページでは、Buildy用RSSフィードの仕様について説明いたします。</p>
+<p>Buildy用RSSフィードはRSS 2.0を元に作成しております。
+近日中にAtomにも対応する予定ですので、少しばかりお待ちください。</p>
+<p>サンプルフィードは<a href="sample.html">こちら</a>をご覧ください。</p>
+<h2 id="page_RSS_20BuildyRSS">RSS 2.0からBuildy用RSSフィードへの変更手順</h2>
 <ol>
 <li>各<code>&lt;item&gt;</code>に<code>&lt;bdy:thumbnail&gt;</code>を追加</li>
 </ol>
-<p><code>bdy:thumbnail</code>はリストで表示される画像のURLである。</p>
+<p><code>bdy:thumbnail</code>は記事一覧ページで表示される画像のURLになります。</p>
 <ol start="2">
 <li>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:image&gt;</code>を追加</li>
 </ol>
-<p>記事を閲覧する時に表示されるトップ画像である。
-ない場合は、<code>bdy:thumbnail</code>が利用される。</p>
+<p>記事閲覧ページの上部に表示されるトップ画像です。
+このタグがない場合は、<code>bdy:thumbnail</code>が利用されます。</p>
 <ol start="3">
 <li>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:category&gt;</code>を追加</li>
 </ol>
-<p><code>bdy:category</code>が既にある場合、一番最初のカテゴリが利用される。
-別のカテゴリを指定したい場合、<code>&lt;bdy:category&gt;カテゴリの名前&lt;/bdy:category&gt;</code>を追加する。</p>
+<p>記事のカテゴリになります。
+<code>category</code>が既にある場合、<code>category</code>の一番最初のカテゴリが利用されます。
+<code>category</code>と別のカテゴリを指定したい場合、<code>&lt;bdy:category&gt;カテゴリの名前&lt;/bdy:category&gt;</code>を追加してください。</p>
 <ol start="4">
-<li>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:related&gt;</code>を追加</li>
+<li>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:relatedLink&gt;</code>を追加</li>
 </ol>
-<p>関連記事を表示したい場合、<code>bdy:related</code>を追加する。</p>
+<p>記事閲覧ページの下部に関連記事を表示する場合、<code>bdy:relatedLink</code>を追加してください。</p>
 <pre><code>&lt;bdy:relatedLink title=&quot;関連記事1&quot; link=&quot;https://example.com/path/to/article&quot; thumbnail=&quot;https://example.com/article/image.jpg&quot; /&gt;
-&lt;bdy:relatedLink title=&quot;関連記事1&quot; link=&quot;https://example.com/path/to/other/article&quot; thumbnail=&quot;https://example.com/article/image.jpg&quot; /&gt;
+&lt;bdy:relatedLink title=&quot;関連記事2&quot; link=&quot;https://example.com/path/to/other/article&quot; thumbnail=&quot;https://example.com/article/image.jpg&quot; /&gt;
 </code></pre>
 <ol start="5">
-<li>任意: <code>channel</code>の下にタブとして表示したいカテゴリを<code>&lt;bdy:tab&gt;</code>として追加</li>
+<li>任意: <code>channel</code>の下に<code>&lt;bdy:tab&gt;</code>として追加</li>
 </ol>
-<p>ダッシュボードからこの設定ができるようになるが、動的にアプリのタブを変えたい場合は
-以下の設定が可能となっている。</p>
+<p><code>channel</code>直下に<code>&lt;bdy:tab&gt;</code>を追加することで
+記事一覧ページでのタブ（上部にある「トップ」「エンタメ」等）を定義することができます。
+基本的にダッシュボードからこの設定ができるようになりますが、
+動的にこれらのタブを変えたい場合は、以下のように設定ができます。</p>
 <pre><code class="language-html">  &lt;!-- channelの下 --&gt;
   &lt;bdy:tab&gt;
     &lt;title&gt;トップ&lt;/title&gt;
@@ -110,7 +117,7 @@
   &lt;/bdy:tab&gt;
 </code></pre>
 <h2 id="page_">ドキュメンテーション</h2>
-<p>以下の表に入っていない要素が無視される。</p>
+<p>以下の表に入っていない要素は無視されます。</p>
 <h3 id="page_"><code>&lt;channel&gt;</code>タグ</h3>
 <h4 id="page_">要素一覧</h4>
 <table>
@@ -128,28 +135,28 @@
 <td><code>title</code></td>
 <td>○</td>
 <td></td>
-<td>フィードのタイトル</td>
+<td>RSSフィードのタイトル</td>
 <td>クロードテック最新情報</td>
 </tr>
 <tr>
 <td><code>link</code></td>
 <td></td>
 <td></td>
-<td>フィードのウェブサイト</td>
+<td>RSSフィードのウェブサイト</td>
 <td>http://claudetech.com</td>
 </tr>
 <tr>
 <td><code>description</code></td>
 <td></td>
 <td></td>
-<td>フィードについての説明</td>
+<td>RSSフィードについての説明</td>
 <td>クロードテックの最新情報をお届けします</td>
 </tr>
 <tr>
 <td><code>language</code></td>
 <td></td>
 <td></td>
-<td>フィードの言語</td>
+<td>RSSフィードの言語</td>
 <td>ja</td>
 </tr>
 <tr>
@@ -160,27 +167,34 @@
 <td>60</td>
 </tr>
 <tr>
+<td><code>pubDate</code></td>
+<td></td>
+<td></td>
+<td>最終更新日時</td>
+<td>Thu, 30 Jun 2016 10:33:06 +0000</td>
+</tr>
+<tr>
 <td><code>bdy:tab</code></td>
+<td></td>
 <td>○</td>
-<td>○</td>
-<td>アプリで表示されるカテゴリ</td>
+<td>アプリ内の記事一覧ページで表示されるタブ名</td>
 <td>以下参照</td>
 </tr>
 <tr>
 <td><code>item</code></td>
 <td></td>
 <td>○</td>
-<td>フィードに表示されるコンテンツ</td>
+<td>アプリ内の記事一覧ページに表示されるコンテンツ</td>
 <td>以下参照</td>
 </tr>
 </tbody>
 </table>
 <h3 id="page_"><code>&lt;bdy:tab&gt;</code>タグ</h3>
-<p><code>&lt;bdy:tab&gt;</code>はBuildyで表示されるカテゴリを表す。
-<code>&lt;bdy:tab&gt;</code>が入ってる順番でアプリ内でタブが表示される。</p>
-<p>以下の画像のでは、「ニュース」、「エンタメ」、「スポーツ」などのカテゴリが含まれている。</p>
+<p><code>&lt;bdy:tab&gt;</code>はアプリ内の記事一覧ページの上部で表示されるタブを表します。
+<code>&lt;bdy:tab&gt;</code>が入ってる順番がアプリ内のタブの順番になります。</p>
+<p>下の画像のアプリでは、「ニュース」、「エンタメ」、「スポーツ」などのタブが含まれています。</p>
 <p><img src="https://images.buildy.jp/app_owner-1/IMG_0748-GWVjBQU.jpg" alt="Tabs" /></p>
-<h5 id="page_">要素一覧</h5>
+<h5 id="page_"><code>&lt;bdy:tab&gt;</code>タグ内の要素一覧</h5>
 <table>
 <thead>
 <tr>
@@ -203,14 +217,14 @@
 <td><code>filter</code></td>
 <td></td>
 <td>○</td>
-<td>タブに表示されるコンテントのフィルタ</td>
+<td>タブに表示される記事のフィルタ</td>
 <td>以下参照</td>
 </tr>
 </tbody>
 </table>
 <h3 id="page_"><code>filter</code>タグ</h3>
-<p>フィルタはカテゴリのタブに表示されるものを制限する。
-フィルタが１つもない場合は、すべてのコンテンツが表示される。</p>
+<p>フィルタはタブに表示される記事を制限するために使用します。
+フィルタが１つもない場合は、すべてのコンテンツが表示されます。</p>
 <h5 id="page_">属性一覧</h5>
 <table>
 <thead>
@@ -258,22 +272,22 @@
 </tr>
 </tbody>
 </table>
-<h6 id="page_"><code>value</code>について</h6>
+<h6 id="page_"><code>value</code>の数について</h6>
 <ul>
 <li>
-<code>operator</code>が<code>eq</code>の場合は、１つが必要</li>
+<code>operator</code>が<code>eq</code>の場合は、１つだけ必要</li>
 <li>
 <code>operator</code>が<code>in</code>の場合は、１つ以上が必要</li>
 </ul>
 <h6 id="page_">例</h6>
-<p><code>bdy:category</code>が<code>ニュース</code>のもののみ表示する場合は、以下のフィルタが用いられる。</p>
+<p><code>bdy:category</code>が<code>ニュース</code>の記事のみ表示する場合は、以下のフィルタが用いられます。</p>
 <pre><code>&lt;filter operator=&quot;eq&quot;&gt;
   &lt;field&gt;bdy:category&lt;/field&gt;
   &lt;value&gt;ニュース&lt;/value&gt;
 &lt;/filter&gt;
 </code></pre>
 <h3 id="page_"><code>item</code>タグ</h3>
-<h5 id="page_">要素一覧</h5>
+<h5 id="page_"><code>item</code>タグの要素一覧</h5>
 <table>
 <thead>
 <tr>
@@ -296,14 +310,14 @@
 <td><code>content:encoded</code></td>
 <td>○</td>
 <td></td>
-<td>CDATAに入った記事のHTMLコンテンツ</td>
+<td>エンコードされた記事のHTMLコンテンツ</td>
 <td><code>&lt;![CDATA[&lt;h1&gt;記事の中身&lt;/h1&gt;]]&gt;</code></td>
 </tr>
 <tr>
 <td><code>description</code></td>
 <td></td>
 <td></td>
-<td>記事のトップに表示される概要</td>
+<td>記事閲覧ページの上部に表示される概要</td>
 <td><code>&lt;![CDATA[&lt;h3&gt;8月10日を持って、検索機能を追加しました&lt;/h3&gt;]]&gt;。</code></td>
 </tr>
 <tr>
@@ -324,7 +338,7 @@
 <td><code>bdy:thumbnail</code></td>
 <td></td>
 <td></td>
-<td>記事一覧で表示される画像</td>
+<td>記事一覧ページで表示される画像</td>
 <td>https://example.com/thumbnail.png</td>
 </tr>
 <tr>
@@ -343,8 +357,8 @@
 </tr>
 </tbody>
 </table>
-<h3 id="page_"><code>bdy:relatedLink</code></h3>
-<p><code>bdy:relatedLink</code>は閲覧ページの下に表示される関連記事を指定する。</p>
+<h3 id="page_"><code>bdy:relatedLink</code>タグ</h3>
+<p><code>bdy:relatedLink</code>を用いることで記事閲覧ページの下部に表示する関連記事を指定できます。</p>
 <h5 id="page_">属性一覧</h5>
 <table>
 <thead>
@@ -380,7 +394,7 @@
 
         <nav>
         <ul class="Pager">
-            <li class=Pager--prev><a href="index.html">Previous</a></li>                    </ul>
+            <li class=Pager--prev><a href="../index.html">Previous</a></li>            <li class=Pager--next><a href="../RSS/sample.html">Next</a></li>        </ul>
     </nav>
     </article>
 
@@ -391,24 +405,24 @@
 
     
     <!-- jQuery -->
-    <script src="themes/daux/js/jquery-1.11.3.min.js"></script>
+    <script src="../themes/daux/js/jquery-1.11.3.min.js"></script>
 
     <!-- hightlight.js -->
-    <script src="themes/daux/js/highlight.pack.js"></script>
+    <script src="../themes/daux/js/highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
     <!-- JS -->
     
-    <script src="themes/daux/js/daux.js"></script>
+    <script src="../themes/daux/js/daux.js"></script>
 
             <!-- Tipue Search -->
-        <script type="text/javascript" src="tipuesearch/tipuesearch.js"></script>
+        <script type="text/javascript" src="../tipuesearch/tipuesearch.js"></script>
 
         <script>
             window.onunload = function(){}; // force $(document).ready to be called on back/forward navigation in firefox
             $(function() {
                 tipuesearch({
-                    'base_url': ''
+                    'base_url': '../'
                 });
             });
         </script>
