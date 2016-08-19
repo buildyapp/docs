@@ -127,115 +127,7 @@ If you want to know why it is (or at least can be) useful, there &amp;lt;a href=
         &lt;content:encoded&gt;&amp;lt;p&amp;gt;After &amp;lt;a href=&amp;quot;https://github.com/blog/2097-improved-commenting-with-markdown&amp;quot;&amp;gt;GitHub added plenty of shortcuts&amp;lt;/a&amp;gt; to edit
 markdown in the browser, I had some problem editing directly, having all
 the native Emacs like shortcuts overridden.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;I decided to use Atom to edit even more or less short comments, but
-the copy-pasting was becoming a bit superfluous, taking more time
-than it should.
-I therefore decided to create a plugin to simplify the process, which I
-named &amp;lt;a href=&amp;quot;https://github.com/tuvistavie/atomic-chrome&amp;quot;&amp;gt;Atomic Chrome&amp;lt;/a&amp;gt;.
-If you want to know why it is (or at least can be) useful, there &amp;lt;a href=&amp;quot;https://news.ycombinator.com/item?id=11022356&amp;quot;&amp;gt;a thread on Hackernews&amp;lt;/a&amp;gt; about it.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;https://cloud.githubusercontent.com/assets/1436271/12668226/afe32e26-c697-11e5-9814-2158e665f774.gif&amp;quot; alt=&amp;quot;Gmail editing&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;I will give a short explanation of how it works here.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;The system uses two plugins, a plugin for Google Chrome, and one for
-Atom and communicates using WebSockets.
-When the Atom plugin starts, it launches a WebSocket server and just waits.
-On the Chrome side, when the plugin is launched, it connects to the WebSocket
-server, and sends a message to register the current focused textarea.&amp;lt;br /&amp;gt;
-The Atom plugin then opens a new tab to edit it, and the content of the textarea
-and the Atom tab is synchronized using WS messages.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;The process itself is very simple and straightforward, but the implementation
-is a little more tedious than it seems to be, mainly due to Chrome security
-restrictions.
-Basically there were two major issues when implementing this:&amp;lt;/p&amp;gt;
-
-&amp;lt;ol&amp;gt;
-  &amp;lt;li&amp;gt;The content script being executed in the context of the current page,
-  if the connection is secured, a non secured WS connection will not work&amp;lt;/li&amp;gt;
-  &amp;lt;li&amp;gt;The content script cannot access the page JS, which is ok for textarea
-  and content editable, but which makes it impossible to work with JS based
-  editor like ACE.&amp;lt;/li&amp;gt;
-&amp;lt;/ol&amp;gt;
-
-&amp;lt;p&amp;gt;To handle the secured WS issue, the obvious solution was to move the WebSocket
-connection to a background script. This adds a layer of message passing, which
-goes from&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;Chrome content script -&amp;amp;gt; Atom WS server
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;to&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;Chrome content script -&amp;amp;gt; Chrome background script -&amp;amp;gt; Atom WS server
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;with the &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;content script -&amp;amp;gt; background script&amp;lt;/code&amp;gt; message passing
-done using the &amp;lt;a href=&amp;quot;https://developer.chrome.com/extensions/runtime#type-Port&amp;quot;&amp;gt;Chrome port&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;To be able to access the JS in the page, the solution was to inject a script
-into the page that will have full access to it, and make it communicate with
-the content script to get and set the value of ACE, or whatever JS editor
-we need to handle.
-Again, this adds another layer of message passing, so
-the final flow becomes something like this:&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;Injected script -&amp;amp;gt; Chrome content script -&amp;amp;gt; Chrome background script -&amp;amp;gt; Atom WS server
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;with the &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;injected script -&amp;amp;gt; content script&amp;lt;/code&amp;gt; message sent using &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;window.postMessage&amp;lt;/code&amp;gt;.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;After this, it’s only a matter of adding a handler to support X or Y text editor.
-This is how the class to support &amp;lt;a href=&amp;quot;https://codemirror.net/&amp;quot;&amp;gt;CodeMirror&amp;lt;/a&amp;gt; looks like.&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;language-javascript highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;&amp;lt;span class=&amp;quot;kr&amp;quot;&amp;gt;class&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;InjectedCodeMirrorHandler&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;kr&amp;quot;&amp;gt;extends&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;BaseInjectedHandler&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;load&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;()&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;editor&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;elem&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;parentElement&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;parentElement&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;CodeMirror&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;Promise&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;resolve&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;();&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-
-  &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;getValue&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;()&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;editor&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;getValue&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;();&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-
-  &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;setValue&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;text&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;executeSilenced&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(()&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;amp;gt;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;editor&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;setValue&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;text&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;));&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-
-  &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;bindChange&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;f&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;editor&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;on&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s1&amp;quot;&amp;gt;&amp;#39;change&amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;wrapSilence&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;f&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;));&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-
-  &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;unbindChange&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;f&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;editor&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;off&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s1&amp;quot;&amp;gt;&amp;#39;change&amp;#39;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;f&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;);&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-
-  &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;getExtension&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;()&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;kr&amp;quot;&amp;gt;const&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;currentModeName&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;=&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;this&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;editor&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;getMode&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;().&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;name&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;if&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;commonModes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;currentModeName&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;])&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-      &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;commonModes&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;currentModeName&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;];&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;for&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kr&amp;quot;&amp;gt;const&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;mode&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;of&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;CodeMirror&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;modeInfo&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-      &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;if&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;mode&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;mode&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;===&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;currentModeName&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;&amp;amp;amp;&amp;amp;amp;&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;mode&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;ext&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;
-        &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;mode&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;nx&amp;quot;&amp;gt;ext&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;[&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;mi&amp;quot;&amp;gt;0&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;];&amp;lt;/span&amp;gt;
-      &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;kc&amp;quot;&amp;gt;null&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;;&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;so it would be quite simple to add support for some other editor as well.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;I am now planning on adding the possibility to live convert markdown to HTML,
-which would give a nice way to write email in markdown and have a live preview
-with the email exactly as it will be sent.&amp;lt;/p&amp;gt;
+........
 &lt;/content:encoded&gt;
 
 
@@ -265,22 +157,7 @@ with the email exactly as it will be sent.&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;I wanted to run some commands only when the git repository had been updated, and  do nothing if it was already up to date.&amp;lt;/p&amp;gt;
 
 &amp;lt;p&amp;gt;I did not find anything &amp;lt;a href=&amp;quot;http://docs.ansible.com/ansible/git_module.html&amp;quot;&amp;gt;in the documentation&amp;lt;/a&amp;gt;, but after looking a little at the source code, I found out that when using &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;register&amp;lt;/code&amp;gt;, &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;myvar.changed&amp;lt;/code&amp;gt; was set to &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;true&amp;lt;/code&amp;gt; or &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;false&amp;lt;/code&amp;gt; depending on whether the repository had been updated or not.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;So, to get the result I wanted, I just had to write something like this:&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;language-yaml highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;name&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;Fetch project&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;git&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;repo= accept_hostkey=yes dest=&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;register&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;gitclone&amp;lt;/span&amp;gt;
-
-&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;-&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;name&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;Build project&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;command&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;make&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;when&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;gitclone.changed&amp;lt;/span&amp;gt;
-  &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;args&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt;
-    &amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;chdir&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;pi&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt; &amp;lt;span class=&amp;quot;s2&amp;quot;&amp;gt;&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;&amp;lt;/span&amp;gt;
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;I did not found a lot in the documentation about what can be used with &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;register&amp;lt;/code&amp;gt;, but I found out that it was easy enough to get this info from the source code, as it is a simple as looking for &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;module.exit_json&amp;lt;/code&amp;gt; calls in the module. For example for the &amp;lt;a href=&amp;quot;https://github.com/ansible/ansible-modules-core/blob/devel/files/copy.py#L320&amp;quot;&amp;gt;git module&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
+.......
 &lt;/content:encoded&gt;
 
 
@@ -309,16 +186,7 @@ with the email exactly as it will be sent.&amp;lt;/p&amp;gt;
 Being used to repl like &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;ipython&amp;lt;/code&amp;gt; or &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;pry&amp;lt;/code&amp;gt; which do that out of the box, I wanted to have this functionality, which is in my opinion very convenient.&amp;lt;/p&amp;gt;
 
 &amp;lt;p&amp;gt;It seems that the problem is more directly related to Erlang than to Elixir itself, and therefore, the workarounds that are used to get persistent history for the Erlang repl can also be used for Elixir.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;The &amp;lt;a href=&amp;quot;https://github.com/ferd/erlang-history&amp;quot;&amp;gt;erlang-history&amp;lt;/a&amp;gt; project worked perfectly for me&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;language-sh highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;git clone https://github.com/ferd/erlang-history.git
-&amp;lt;span class=&amp;quot;nb&amp;quot;&amp;gt;cd &amp;lt;/span&amp;gt;erlang-history
-make install
-&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;and I was able to get a history persistent across sessions. Note that &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;make install&amp;lt;/code&amp;gt; needs sudo if you do not have write permissions in the Erlang install directory.&amp;lt;/p&amp;gt;
+.......
 &lt;/content:encoded&gt;
 
       &lt;/item&gt;
@@ -340,44 +208,7 @@ make install
         &lt;content:encoded&gt;&amp;lt;p&amp;gt;I have been using Golang to build some REST API recently, and I was having some trouble to serialize my data properly to JSON.&amp;lt;/p&amp;gt;
 
 &amp;lt;p&amp;gt;Almost all tutorial around there tell about how we should return JSON, using some &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;struct&amp;lt;/code&amp;gt; and tags.&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;language-go highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;type&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;User&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;struct&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;ID&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;        &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;int&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;`json:&amp;quot;id&amp;quot;`&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Email&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;     &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;string&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;`json:&amp;quot;email&amp;quot;`&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;HideEmail&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;bool&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;`json:&amp;quot;hide_email&amp;quot;`&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;FirstName&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;string&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;`json:&amp;quot;first_name&amp;quot;`&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;LastName&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;  &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;string&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;`json:&amp;quot;last_name&amp;quot;`&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;CreatedAt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;time&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Time&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;`json:&amp;quot;created_at&amp;quot;`&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;UpdatedAt&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;time&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Time&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;`json:&amp;quot;updated_at&amp;quot;`&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-
-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;user&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;User&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-    &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;ID&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;m&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Email&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;x@example.com&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;FirstName&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;Foo&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;LastName&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;  &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;Bar&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;HideEmail&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;no&amp;quot;&amp;gt;true&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;}&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-
-&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;data&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;err&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;json&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Marshal&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;user&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-&amp;lt;/span&amp;gt;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;This is indeed useful, but there are many cases when we want to dynamically choose what to serialize depending some privacy settings, whether the user is logged in or not, or a lot of other factors.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;For these situations, I found it a bit verbose and repetitive to have to enter each field in a &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;map&amp;lt;/code&amp;gt; to be able to have the wanted serialization output, so I decided to create a little library to help me do this. Its goal is basically to help converting a &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;struct&amp;lt;/code&amp;gt; to a &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;map&amp;lt;/code&amp;gt; with the most flexibility as possible.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;With the above &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;struct&amp;lt;/code&amp;gt;, given I want to hide the &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;Email&amp;lt;/code&amp;gt; field when &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;HideEmail&amp;lt;/code&amp;gt; is true, I can write:&amp;lt;/p&amp;gt;
-
-&amp;lt;div class=&amp;quot;language-go highlighter-rouge&amp;quot;&amp;gt;&amp;lt;pre class=&amp;quot;highlight&amp;quot;&amp;gt;&amp;lt;code&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;userSerializer&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;:=&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;structomap&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;New&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;()&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-                             &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;UseSnakeCase&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;()&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-                             &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Pick&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;ID&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;Email&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;FirstName&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;,&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;LastName&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-                             &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;Omit&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;HideEmail&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-                             &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;OmitIf&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;func&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;u&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;interface&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{})&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;kt&amp;quot;&amp;gt;bool&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;{&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-                                &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;k&amp;quot;&amp;gt;return&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;u&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;(&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;User&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;o&amp;quot;&amp;gt;.&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;n&amp;quot;&amp;gt;HideEmail&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-                            &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;},&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt; &amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;s&amp;quot;&amp;gt;&amp;quot;Email&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;p&amp;quot;&amp;gt;)&amp;lt;/span&amp;gt;&amp;lt;span class=&amp;quot;x&amp;quot;&amp;gt;
-&amp;lt;/span&amp;gt;&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
-&amp;lt;/div&amp;gt;
-
-&amp;lt;p&amp;gt;and then I just need to call &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;userSerializer.Transform&amp;lt;/code&amp;gt; on any user to get the result I want as a &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;map[string]interface{}&amp;lt;/code&amp;gt;. What is nice about this is that it also works with arrays: &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;userSerializer.TransformArray&amp;lt;/code&amp;gt; will transform an array of &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;User&amp;lt;/code&amp;gt; in an array of &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;map[string]interface{}&amp;lt;/code&amp;gt; which can be directly serialized to JSON.&amp;lt;/p&amp;gt;
-
-&amp;lt;p&amp;gt;You can find more information on &amp;lt;a href=&amp;quot;https://github.com/tuvistavie/structomap&amp;quot;&amp;gt;the project page&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
+..........
 &lt;/content:encoded&gt;
 
       &lt;/item&gt;
