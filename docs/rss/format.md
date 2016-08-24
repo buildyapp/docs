@@ -26,16 +26,16 @@ RSSドキュメントが以下の２つのネームスペースを定義する�
 
     `bdy:thumbnail`は記事一覧ページで表示される画像のURLになります。
 
-2. 任意: 各`<item>`に`<bdy:image>`を追加
-
-    記事閲覧ページの上部に表示されるトップ画像です。
-    このタグがない場合は、`bdy:thumbnail`が利用されます。
-
-3. 任意: 各`<item>`に`<bdy:category>`を追加
+2. 各`<item>`に`<bdy:category>`を追加
 
     記事のカテゴリになります。
     `category`が既にある場合、`category`の一番最初のカテゴリが利用されます。
     `category`と別のカテゴリを指定したい場合、`<bdy:category>カテゴリの名前</bdy:category>`を追加してください。
+
+3. 任意: 各`<item>`に`<bdy:image>`を追加
+
+    記事閲覧ページの上部に表示されるトップ画像です。
+    このタグがない場合は、`bdy:thumbnail`が利用されます。
 
 4. 任意: 各`<item>`に`<bdy:relatedLink>`を追加
 
