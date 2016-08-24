@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:bdy="https://docs.buildy.jp/rss/format" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Daniel Perez blog</title>
+    <description>blog about programming</description>
+    <link>http://tuvistavie.com//</link>
+    <language>en</language>
+    <ttl>60</ttl>
+    <pubDate>Thu, 30 Jun 2016 10:33:06 +0000</pubDate>
+
+    <bdy:tab>
+      <title>Top</title>
+    </bdy:tab>
+    <bdy:tab>
+      <title>Projects</title>
+      <filter operator="eq">
+        <field>bdy:category</field>
+        <value>Projects</field>
+      </filter>
+    </bdy:tab>
+    <bdy:tab>
+      <title>How To</title>
+      <filter operator="eq">
+        <field>bdy:category</field>
+        <value>How To</field>
+      </filter>
+    </bdy:tab>
+
+      <item>
+        <title>Use Atom to edit in Chrome</title>
+
+        <category>Projects</category>
+        <category>Chrome</category>
+        <category>Atom</category>
+
+        <pubDate>Wed, 24 Feb 2016 00:00:00 +0000</pubDate>
+        <link>http://tuvistavie.com/2016/atomic-chrome/</link>
+
+        <bdy:category>Projects</bdy:category>
+        <bdy:thumbnail>https://cloud.githubusercontent.com/assets/1436271/12668235/c228c514-c697-11e5-8cea-e71acabcd300.png</bdy:thumbnail>
+        <bdy:image>https://cloud.githubusercontent.com/assets/1436271/12668226/afe32e26-c697-11e5-9814-2158e665f774.gif</bdy:thumbnail>
+
+        <bdy:relatedLink
+          title="Optional parameters and decorators in JavaScript"
+          link="http://tuvistavie.com/2015/javascript-optional-parameters/"
+          thumbnail="http://tuvistavie.com/images/profile.png" />
+        <bdy:relatedLink
+          title="Grunt errors in browser"
+          link="http://tuvistavie.com/2014/grunt-errors-in-browser/"
+          thumbnail="http://res.cloudinary.com/dtdu3sqtl/image/upload/c_scale,w_550/v1408153873/optimised_pozz3l.gif" />
+
+        <description>I decided to create a plugin to simplify the process, which I
+named &lt;a href=&quot;https://github.com/tuvistavie/atomic-chrome&quot;&gt;Atomic Chrome&lt;/a&gt;.
+If you want to know why it is (or at least can be) useful, there &lt;a href=&quot;https://news.ycombinator.com/item?id=11022356&quot;&gt;a thread on Hackernews&lt;/a&gt; about it.&lt;/p&gt;</description>
+
+        <content:encoded>&lt;p&gt;After &lt;a href=&quot;https://github.com/blog/2097-improved-commenting-with-markdown&quot;&gt;GitHub added plenty of shortcuts&lt;/a&gt; to edit
+markdown in the browser, I had some problem editing directly, having all
+the native Emacs like shortcuts overridden.&lt;/p&gt;
+........
+</content:encoded>
+
+
+      </item>
+
+      <item>
+        <title>Run commands only on git update with Ansible</title>
+
+        <category>How To</category>
+        <category>DevOps</category>
+        <category>Ansible</category>
+
+        <pubDate>Sat, 12 Sep 2015 00:00:00 +0000</pubDate>
+        <link>http://tuvistavie.com/2015/ansible-git-update/</link>
+
+        <bdy:category>How To</bdy:category>
+        <bdy:thumbnail>https://www.skytap.com/wp-content/uploads/2015/12/SetWidth360-ansible-logo-black-square.png</bdy:thumbnail>
+
+        <bdy:relatedLink
+          title="SSH invalid byte sequence"
+          link="http://tuvistavie.com/2015/chef-ssh-invalid-sequence/"
+          thumbnail="http://tuvistavie.com/images/profile.png" />
+
+        <description>I wanted to run some commands only when the git repository had been updated, and  do nothing if it was already up to date.</description>
+        <content:encoded>&lt;p&gt;I have recently switched my automation workflow from Chef to Ansible, and just bumped into a simple issue.&lt;/p&gt;
+
+&lt;p&gt;I wanted to run some commands only when the git repository had been updated, and  do nothing if it was already up to date.&lt;/p&gt;
+
+&lt;p&gt;I did not find anything &lt;a href=&quot;http://docs.ansible.com/ansible/git_module.html&quot;&gt;in the documentation&lt;/a&gt;, but after looking a little at the source code, I found out that when using &lt;code class=&quot;highlighter-rouge&quot;&gt;register&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;myvar.changed&lt;/code&gt; was set to &lt;code class=&quot;highlighter-rouge&quot;&gt;true&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt; depending on whether the repository had been updated or not.&lt;/p&gt;
+.......
+</content:encoded>
+
+
+      </item>
+
+      <item>
+        <title>Persistent history in Elixir repl IEx</title>
+
+        <category>How To</category>
+        <category>Elixir</category>
+
+        <pubDate>Wed, 02 Sep 2015 00:00:00 +0000</pubDate>
+        <link>http://tuvistavie.com/2015/iex-persistent-history/</link>
+
+        <bdy:category>How To</bdy:category>
+        <bdy:thumbnail>https://avatars2.githubusercontent.com/u/1481354?v=3&s=400</bdy:thumbnail>
+        <bdy:image>http://elixir-lang.org/images/logo/logo.png</bdy:image>
+
+        <bdy:relatedLink
+          title="What's coming in Elixir 1.3"
+          link="http://tuvistavie.com/2016/elixir-1-3/"
+          thumbnail="https://avatars2.githubusercontent.com/u/1481354?v=3&s=400" />
+
+        <description>Elixir repl, IEx, history does not persist between sessions</description>
+        <content:encoded>&lt;p&gt;Recently I am starting to use Elixir a bit more seriously, and a small issue I had was that Elixir repl, IEx, history does not persist between sessions.
+Being used to repl like &lt;code class=&quot;highlighter-rouge&quot;&gt;ipython&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;pry&lt;/code&gt; which do that out of the box, I wanted to have this functionality, which is in my opinion very convenient.&lt;/p&gt;
+
+&lt;p&gt;It seems that the problem is more directly related to Erlang than to Elixir itself, and therefore, the workarounds that are used to get persistent history for the Erlang repl can also be used for Elixir.&lt;/p&gt;
+.......
+</content:encoded>
+
+      </item>
+
+      <item>
+        <title>Go serialization</title>
+
+        <category>Projects</category>
+        <category>Go</category>
+
+        <pubDate>Fri, 29 May 2015 00:00:00 +0000</pubDate>
+        <link>http://tuvistavie.com/2015/go-serialization/</link>
+
+        <bdy:category>Projects</bdy:category>
+        <bdy:thumbnail>http://www.unixstickers.com/image/cache/data/stickers/golang/golang.sh-600x600.png</bdy:thumbnail>
+
+        <description>&lt;p&gt;I have been using Golang to build some REST API recently, and I was having some trouble to serialize my data properly to JSON.&lt;/p&gt;</description>
+
+        <content:encoded>&lt;p&gt;I have been using Golang to build some REST API recently, and I was having some trouble to serialize my data properly to JSON.&lt;/p&gt;
+
+&lt;p&gt;Almost all tutorial around there tell about how we should return JSON, using some &lt;code class=&quot;highlighter-rouge&quot;&gt;struct&lt;/code&gt; and tags.&lt;/p&gt;
+..........
+</content:encoded>
+
+      </item>
+  </channel>
+</rss>

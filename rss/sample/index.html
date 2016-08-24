@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <title>サンプル - Buildyドキュメンテーション</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "サンプル";
+    var mkdocs_page_input_path = "rss/sample.md";
+    var mkdocs_page_url = "/rss/sample/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Buildyドキュメンテーション</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">トップ</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>RSS</span></li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../format/">ドキュメンテーション</a>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">サンプル</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#_1">サンプルフィード</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Buildyドキュメンテーション</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>RSS &raquo;</li>
+        
+      
+    
+    <li>サンプル</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="_1">サンプルフィード</h1>
+<p>以下はBuildy用のサンプルフィード。</p>
+<pre><code class="xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;rss version=&quot;2.0&quot;
+     xmlns:bdy=&quot;https://docs.buildy.jp/rss/format/&quot;
+     xmlns:content=&quot;http://purl.org/rss/1.0/modules/content/&quot;&gt;
+  &lt;channel&gt;
+    &lt;title&gt;Daniel Perez blog&lt;/title&gt;
+    &lt;description&gt;blog about programming&lt;/description&gt;
+    &lt;link&gt;http://tuvistavie.com//&lt;/link&gt;
+    &lt;language&gt;en&lt;/language&gt;
+    &lt;ttl&gt;60&lt;/ttl&gt;
+    &lt;pubDate&gt;Thu, 30 Jun 2016 10:33:06 +0000&lt;/pubDate&gt;
+
+    &lt;bdy:tab&gt;
+      &lt;title&gt;Top&lt;/title&gt;
+    &lt;/bdy:tab&gt;
+    &lt;bdy:tab&gt;
+      &lt;title&gt;Projects&lt;/title&gt;
+      &lt;filter operator=&quot;eq&quot;&gt;
+        &lt;field&gt;bdy:category&lt;/field&gt;
+        &lt;value&gt;Projects&lt;/field&gt;
+      &lt;/filter&gt;
+    &lt;/bdy:tab&gt;
+    &lt;bdy:tab&gt;
+      &lt;title&gt;How To&lt;/title&gt;
+      &lt;filter operator=&quot;eq&quot;&gt;
+        &lt;field&gt;bdy:category&lt;/field&gt;
+        &lt;value&gt;How To&lt;/field&gt;
+      &lt;/filter&gt;
+    &lt;/bdy:tab&gt;
+
+      &lt;item&gt;
+        &lt;title&gt;Use Atom to edit in Chrome&lt;/title&gt;
+
+        &lt;category&gt;Projects&lt;/category&gt;
+        &lt;category&gt;Chrome&lt;/category&gt;
+        &lt;category&gt;Atom&lt;/category&gt;
+
+        &lt;pubDate&gt;Wed, 24 Feb 2016 00:00:00 +0000&lt;/pubDate&gt;
+        &lt;link&gt;http://tuvistavie.com/2016/atomic-chrome/&lt;/link&gt;
+
+        &lt;bdy:category&gt;Projects&lt;/bdy:category&gt;
+        &lt;bdy:thumbnail&gt;https://cloud.githubusercontent.com/assets/1436271/12668235/c228c514-c697-11e5-8cea-e71acabcd300.png&lt;/bdy:thumbnail&gt;
+        &lt;bdy:image&gt;https://cloud.githubusercontent.com/assets/1436271/12668226/afe32e26-c697-11e5-9814-2158e665f774.gif&lt;/bdy:thumbnail&gt;
+
+        &lt;bdy:relatedLink
+          title=&quot;Optional parameters and decorators in JavaScript&quot;
+          link=&quot;http://tuvistavie.com/2015/javascript-optional-parameters/&quot;
+          thumbnail=&quot;http://tuvistavie.com/images/profile.png&quot; /&gt;
+        &lt;bdy:relatedLink
+          title=&quot;Grunt errors in browser&quot;
+          link=&quot;http://tuvistavie.com/2014/grunt-errors-in-browser/&quot;
+          thumbnail=&quot;http://res.cloudinary.com/dtdu3sqtl/image/upload/c_scale,w_550/v1408153873/optimised_pozz3l.gif&quot; /&gt;
+
+        &lt;description&gt;I decided to create a plugin to simplify the process, which I
+named &amp;lt;a href=&amp;quot;https://github.com/tuvistavie/atomic-chrome&amp;quot;&amp;gt;Atomic Chrome&amp;lt;/a&amp;gt;.
+If you want to know why it is (or at least can be) useful, there &amp;lt;a href=&amp;quot;https://news.ycombinator.com/item?id=11022356&amp;quot;&amp;gt;a thread on Hackernews&amp;lt;/a&amp;gt; about it.&amp;lt;/p&amp;gt;&lt;/description&gt;
+
+        &lt;content:encoded&gt;&amp;lt;p&amp;gt;After &amp;lt;a href=&amp;quot;https://github.com/blog/2097-improved-commenting-with-markdown&amp;quot;&amp;gt;GitHub added plenty of shortcuts&amp;lt;/a&amp;gt; to edit
+markdown in the browser, I had some problem editing directly, having all
+the native Emacs like shortcuts overridden.&amp;lt;/p&amp;gt;
+........
+&lt;/content:encoded&gt;
+
+
+      &lt;/item&gt;
+
+      &lt;item&gt;
+        &lt;title&gt;Run commands only on git update with Ansible&lt;/title&gt;
+
+        &lt;category&gt;How To&lt;/category&gt;
+        &lt;category&gt;DevOps&lt;/category&gt;
+        &lt;category&gt;Ansible&lt;/category&gt;
+
+        &lt;pubDate&gt;Sat, 12 Sep 2015 00:00:00 +0000&lt;/pubDate&gt;
+        &lt;link&gt;http://tuvistavie.com/2015/ansible-git-update/&lt;/link&gt;
+
+        &lt;bdy:category&gt;How To&lt;/bdy:category&gt;
+        &lt;bdy:thumbnail&gt;https://www.skytap.com/wp-content/uploads/2015/12/SetWidth360-ansible-logo-black-square.png&lt;/bdy:thumbnail&gt;
+
+        &lt;bdy:relatedLink
+          title=&quot;SSH invalid byte sequence&quot;
+          link=&quot;http://tuvistavie.com/2015/chef-ssh-invalid-sequence/&quot;
+          thumbnail=&quot;http://tuvistavie.com/images/profile.png&quot; /&gt;
+
+        &lt;description&gt;I wanted to run some commands only when the git repository had been updated, and  do nothing if it was already up to date.&lt;/description&gt;
+        &lt;content:encoded&gt;&amp;lt;p&amp;gt;I have recently switched my automation workflow from Chef to Ansible, and just bumped into a simple issue.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;I wanted to run some commands only when the git repository had been updated, and  do nothing if it was already up to date.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;I did not find anything &amp;lt;a href=&amp;quot;http://docs.ansible.com/ansible/git_module.html&amp;quot;&amp;gt;in the documentation&amp;lt;/a&amp;gt;, but after looking a little at the source code, I found out that when using &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;register&amp;lt;/code&amp;gt;, &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;myvar.changed&amp;lt;/code&amp;gt; was set to &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;true&amp;lt;/code&amp;gt; or &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;false&amp;lt;/code&amp;gt; depending on whether the repository had been updated or not.&amp;lt;/p&amp;gt;
+.......
+&lt;/content:encoded&gt;
+
+
+      &lt;/item&gt;
+
+      &lt;item&gt;
+        &lt;title&gt;Persistent history in Elixir repl IEx&lt;/title&gt;
+
+        &lt;category&gt;How To&lt;/category&gt;
+        &lt;category&gt;Elixir&lt;/category&gt;
+
+        &lt;pubDate&gt;Wed, 02 Sep 2015 00:00:00 +0000&lt;/pubDate&gt;
+        &lt;link&gt;http://tuvistavie.com/2015/iex-persistent-history/&lt;/link&gt;
+
+        &lt;bdy:category&gt;How To&lt;/bdy:category&gt;
+        &lt;bdy:thumbnail&gt;https://avatars2.githubusercontent.com/u/1481354?v=3&amp;s=400&lt;/bdy:thumbnail&gt;
+        &lt;bdy:image&gt;http://elixir-lang.org/images/logo/logo.png&lt;/bdy:image&gt;
+
+        &lt;bdy:relatedLink
+          title=&quot;What's coming in Elixir 1.3&quot;
+          link=&quot;http://tuvistavie.com/2016/elixir-1-3/&quot;
+          thumbnail=&quot;https://avatars2.githubusercontent.com/u/1481354?v=3&amp;s=400&quot; /&gt;
+
+        &lt;description&gt;Elixir repl, IEx, history does not persist between sessions&lt;/description&gt;
+        &lt;content:encoded&gt;&amp;lt;p&amp;gt;Recently I am starting to use Elixir a bit more seriously, and a small issue I had was that Elixir repl, IEx, history does not persist between sessions.
+Being used to repl like &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;ipython&amp;lt;/code&amp;gt; or &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;pry&amp;lt;/code&amp;gt; which do that out of the box, I wanted to have this functionality, which is in my opinion very convenient.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;It seems that the problem is more directly related to Erlang than to Elixir itself, and therefore, the workarounds that are used to get persistent history for the Erlang repl can also be used for Elixir.&amp;lt;/p&amp;gt;
+.......
+&lt;/content:encoded&gt;
+
+      &lt;/item&gt;
+
+      &lt;item&gt;
+        &lt;title&gt;Go serialization&lt;/title&gt;
+
+        &lt;category&gt;Projects&lt;/category&gt;
+        &lt;category&gt;Go&lt;/category&gt;
+
+        &lt;pubDate&gt;Fri, 29 May 2015 00:00:00 +0000&lt;/pubDate&gt;
+        &lt;link&gt;http://tuvistavie.com/2015/go-serialization/&lt;/link&gt;
+
+        &lt;bdy:category&gt;Projects&lt;/bdy:category&gt;
+        &lt;bdy:thumbnail&gt;http://www.unixstickers.com/image/cache/data/stickers/golang/golang.sh-600x600.png&lt;/bdy:thumbnail&gt;
+
+        &lt;description&gt;&amp;lt;p&amp;gt;I have been using Golang to build some REST API recently, and I was having some trouble to serialize my data properly to JSON.&amp;lt;/p&amp;gt;&lt;/description&gt;
+
+        &lt;content:encoded&gt;&amp;lt;p&amp;gt;I have been using Golang to build some REST API recently, and I was having some trouble to serialize my data properly to JSON.&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;Almost all tutorial around there tell about how we should return JSON, using some &amp;lt;code class=&amp;quot;highlighter-rouge&amp;quot;&amp;gt;struct&amp;lt;/code&amp;gt; and tags.&amp;lt;/p&amp;gt;
+..........
+&lt;/content:encoded&gt;
+
+      &lt;/item&gt;
+  &lt;/channel&gt;
+&lt;/rss&gt;
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../format/" class="btn btn-neutral" title="ドキュメンテーション"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../format/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+
+</body>
+</html>

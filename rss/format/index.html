@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <title>ドキュメンテーション - Buildyドキュメンテーション</title>
+  
+
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/highlight.css">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "ドキュメンテーション";
+    var mkdocs_page_input_path = "rss/format.md";
+    var mkdocs_page_url = "/rss/format/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js"></script>
+  <script src="../../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+  <script src="../../js/theme.js"></script> 
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Buildyドキュメンテーション</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 ">
+        <a class="" href="../..">トップ</a>
+        
+    </li>
+<li>
+          
+            <li>
+    <ul class="subnav">
+    <li><span>RSS</span></li>
+
+        
+            
+    <li class="toctree-l1 current">
+        <a class="current" href="./">ドキュメンテーション</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#buildy">Buildy用のフィードについて</a></li>
+                
+                    <li><a class="toctree-l4" href="#xml">XMLネームスペース</a></li>
+                
+                    <li><a class="toctree-l4" href="#rss-20buildyrss">RSS 2.0からBuildy用RSSフィードへの変更手順</a></li>
+                
+                    <li><a class="toctree-l4" href="#_1">ドキュメンテーション</a></li>
+                
+            
+            </ul>
+        
+    </li>
+
+        
+            
+    <li class="toctree-l1 ">
+        <a class="" href="../sample/">サンプル</a>
+        
+    </li>
+
+        
+    </ul>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Buildyドキュメンテーション</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>RSS &raquo;</li>
+        
+      
+    
+    <li>ドキュメンテーション</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="buildy">Buildy用のフィードについて</h1>
+<p>Buildyでは、RSSフィードを用いることで、
+コンテンツをアプリに同期できるようになっています。
+本ページでは、Buildy用RSSフィードの仕様について説明いたします。</p>
+<p>Buildy用RSSフィードはRSS 2.0を元に作成しております。
+近日中にAtomにも対応する予定ですので、少しばかりお待ちください。</p>
+<p>サンプルフィードは<a href="../sample/">こちら</a>をご覧ください。</p>
+<h2 id="xml">XMLネームスペース</h2>
+<p>RSSドキュメントが以下の２つのネームスペースを定義する必要があります。</p>
+<ul>
+<li><code>xmlns:bdy="https://docs.buildy.jp/rss/format/"</code></li>
+<li><code>xmlns:content="http://purl.org/rss/1.0/modules/content/"</code></li>
+</ul>
+<p>追加方法について、<a href="../sample">サンプル</a>をご確認ください。</p>
+<h2 id="rss-20buildyrss">RSS 2.0からBuildy用RSSフィードへの変更手順</h2>
+<h3 id="item"><code>&lt;item&gt;</code>の変更</h3>
+<ol>
+<li>
+<p>各<code>&lt;item&gt;</code>に<code>&lt;bdy:thumbnail&gt;</code>を追加</p>
+<p><code>bdy:thumbnail</code>は記事一覧ページで表示される画像のURLになります。</p>
+</li>
+<li>
+<p>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:image&gt;</code>を追加</p>
+<p>記事閲覧ページの上部に表示されるトップ画像です。
+このタグがない場合は、<code>bdy:thumbnail</code>が利用されます。</p>
+</li>
+<li>
+<p>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:category&gt;</code>を追加</p>
+<p>記事のカテゴリになります。
+<code>category</code>が既にある場合、<code>category</code>の一番最初のカテゴリが利用されます。
+<code>category</code>と別のカテゴリを指定したい場合、<code>&lt;bdy:category&gt;カテゴリの名前&lt;/bdy:category&gt;</code>を追加してください。</p>
+</li>
+<li>
+<p>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:relatedLink&gt;</code>を追加</p>
+<p>記事閲覧ページの下部に関連記事を表示する場合、<code>bdy:relatedLink</code>を追加してください。</p>
+</li>
+</ol>
+<pre><code class="xml">&lt;bdy:relatedLink title=&quot;関連記事1&quot; link=&quot;https://example.com/path/to/article&quot; thumbnail=&quot;https://example.com/article/image.jpg&quot; /&gt;
+&lt;bdy:relatedLink title=&quot;関連記事2&quot; link=&quot;https://example.com/path/to/other/article&quot; thumbnail=&quot;https://example.com/article/image.jpg&quot; /&gt;
+</code></pre>
+
+<h3 id="channel"><code>&lt;channel&gt;</code>の変更</h3>
+<ol>
+<li>
+<p>任意: <code>channel</code>の下に<code>&lt;bdy:tab&gt;</code>を追加</p>
+<p><code>channel</code>直下に<code>&lt;bdy:tab&gt;</code>を追加することで
+記事一覧ページでのタブ（上部にある「トップ」「エンタメ」等）を定義することができます。
+基本的にダッシュボードからこの設定ができるようになりますが、
+動的にこれらのタブを変えたい場合は、以下のように設定ができます。</p>
+</li>
+</ol>
+<pre><code class="html">  &lt;!-- channelの下 --&gt;
+  &lt;bdy:tab&gt;
+    &lt;title&gt;トップ&lt;/title&gt;
+  &lt;/bdy:tab&gt;
+  &lt;bdy:tab&gt;
+    &lt;title&gt;新規情報&lt;/title&gt;
+    &lt;filter operator=&quot;eq&quot;&gt;
+      &lt;field&gt;bdy:category&lt;/field&gt;
+      &lt;value&gt;新規情報&lt;/value&gt;
+    &lt;/filter&gt;
+  &lt;/bdy:tab&gt;
+</code></pre>
+
+<h2 id="_1">ドキュメンテーション</h2>
+<p>以下の表に入っていない要素は無視されます。</p>
+<h3 id="channel_1"><code>&lt;channel&gt;</code>タグ</h3>
+<h4 id="_2">要素一覧</h4>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>必須</th>
+<th>複数</th>
+<th>説明</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>○</td>
+<td></td>
+<td>RSSフィードのタイトル</td>
+<td>クロードテック最新情報</td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td></td>
+<td></td>
+<td>RSSフィードのウェブサイト</td>
+<td>http://claudetech.com</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td></td>
+<td></td>
+<td>RSSフィードについての説明</td>
+<td>クロードテックの最新情報をお届けします</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td></td>
+<td></td>
+<td>RSSフィードの言語</td>
+<td>ja</td>
+</tr>
+<tr>
+<td><code>ttl</code></td>
+<td></td>
+<td></td>
+<td>RSSフィードにアクセスしてコンテンツをアプリに同期する頻度（単位は分）</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>pubDate</code></td>
+<td></td>
+<td></td>
+<td>最終更新日時</td>
+<td>Thu, 30 Jun 2016 10:33:06 +0000</td>
+</tr>
+<tr>
+<td><code>bdy:tab</code></td>
+<td></td>
+<td>○</td>
+<td>アプリ内の記事一覧ページで表示されるタブ名</td>
+<td>以下参照</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td></td>
+<td>○</td>
+<td>アプリ内の記事一覧ページに表示されるコンテンツ</td>
+<td>以下参照</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bdytab"><code>&lt;bdy:tab&gt;</code>タグ</h3>
+<p><code>&lt;bdy:tab&gt;</code>はアプリ内の記事一覧ページの上部で表示されるタブを表します。
+<code>&lt;bdy:tab&gt;</code>が入ってる順番がアプリ内のタブの順番になります。</p>
+<p>下の画像のアプリでは、「ニュース」、「エンタメ」、「スポーツ」などのタブが含まれています。</p>
+<p><img alt="Tabs" src="https://images.buildy.jp/app_owner-1/IMG_0748-GWVjBQU.jpg" /></p>
+<h5 id="bdytab_1"><code>&lt;bdy:tab&gt;</code>タグ内の要素一覧</h5>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>必須</th>
+<th>複数</th>
+<th>説明</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>○</td>
+<td></td>
+<td>タブに表示される名前</td>
+<td>新着情報</td>
+</tr>
+<tr>
+<td><code>filter</code></td>
+<td></td>
+<td>○</td>
+<td>タブに表示される記事のフィルタ</td>
+<td>以下参照</td>
+</tr>
+</tbody>
+</table>
+<h3 id="filter"><code>filter</code>タグ</h3>
+<p>フィルタはタブに表示される記事を制限するために使用します。
+フィルタが１つもない場合は、すべてのコンテンツが表示されます。</p>
+<h5 id="_3">属性一覧</h5>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>必須</th>
+<th>説明</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operator</code></td>
+<td>○</td>
+<td>フィルタリングに使うオペレーター</td>
+<td>eq</td>
+</tr>
+</tbody>
+</table>
+<h5 id="_4">要素一覧</h5>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>必須</th>
+<th>複数</th>
+<th>説明</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>field</code></td>
+<td>○</td>
+<td></td>
+<td>フィルタリングに使う<code>item</code>の要素</td>
+<td>bdy:category</td>
+</tr>
+<tr>
+<td><code>value</code></td>
+<td>○</td>
+<td>○</td>
+<td><code>field</code>と比較するための値</td>
+<td>ニュース</td>
+</tr>
+</tbody>
+</table>
+<h6 id="value"><code>value</code>の数について</h6>
+<ul>
+<li><code>operator</code>が<code>eq</code>の場合は、１つだけ必要</li>
+<li><code>operator</code>が<code>in</code>の場合は、１つ以上が必要</li>
+</ul>
+<h6 id="_5">例</h6>
+<p><code>bdy:category</code>が<code>ニュース</code>の記事のみ表示する場合は、以下のフィルタが用いられます。</p>
+<pre><code>&lt;filter operator=&quot;eq&quot;&gt;
+  &lt;field&gt;bdy:category&lt;/field&gt;
+  &lt;value&gt;ニュース&lt;/value&gt;
+&lt;/filter&gt;
+</code></pre>
+
+<h3 id="item_1"><code>item</code>タグ</h3>
+<h5 id="item_2"><code>item</code>タグの要素一覧</h5>
+<table>
+<thead>
+<tr>
+<th>要素</th>
+<th>必須</th>
+<th>複数</th>
+<th>説明</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>○</td>
+<td></td>
+<td>記事のタイトル</td>
+<td>新機能を追加しました</td>
+</tr>
+<tr>
+<td><code>content:encoded</code></td>
+<td>○</td>
+<td></td>
+<td>エンコードされた記事のHTMLコンテンツ</td>
+<td><code>&lt;![CDATA[&lt;h1&gt;記事の中身&lt;/h1&gt;]]&gt;</code></td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td></td>
+<td></td>
+<td>記事閲覧ページの上部に表示される概要</td>
+<td><code>&lt;![CDATA[&lt;h3&gt;8月10日を持って、検索機能を追加しました&lt;/h3&gt;]]&gt;。</code></td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td>○</td>
+<td></td>
+<td>記事のURL</td>
+<td>http://blog.claudetech.com/?p=38</td>
+</tr>
+<tr>
+<td><code>bdy:category</code></td>
+<td></td>
+<td></td>
+<td>記事のカテゴリの名前</td>
+<td>ニュース</td>
+</tr>
+<tr>
+<td><code>bdy:thumbnail</code></td>
+<td></td>
+<td></td>
+<td>記事一覧ページで表示される画像</td>
+<td>https://example.com/thumbnail.png</td>
+</tr>
+<tr>
+<td><code>bdy:image</code></td>
+<td></td>
+<td></td>
+<td>記事閲覧ページで表示される画像</td>
+<td>https://example.com/large-image.png</td>
+</tr>
+<tr>
+<td><code>bdy:relatedLink</code></td>
+<td></td>
+<td>○</td>
+<td>記事閲覧ページに表示される関連記事</td>
+<td>以下参照</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bdyrelatedlink"><code>bdy:relatedLink</code>タグ</h3>
+<p><code>bdy:relatedLink</code>を用いることで記事閲覧ページの下部に表示する関連記事を指定できます。</p>
+<h5 id="_6">属性一覧</h5>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>必須</th>
+<th>説明</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td>○</td>
+<td>関連記事のタイトル</td>
+<td>新機能を追加しました</td>
+</tr>
+<tr>
+<td><code>thumbnail</code></td>
+<td>○</td>
+<td>関連記事のサムネイル画像</td>
+<td>https://example.com/thumbnail.png</td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td>○</td>
+<td>関連記事のリンク</td>
+<td>http://blog.claudetech.com/articles/2</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../sample/" class="btn btn-neutral float-right" title="サンプル">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../.." class="btn btn-neutral" title="トップ"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../.." style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../sample/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+
+</body>
+</html>
