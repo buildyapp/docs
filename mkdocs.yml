@@ -1,0 +1,9 @@
+site_name: Buildyドキュメンテーション
+pages:
+  - 'トップ': 'index.md'
+  - RSS:
+      - 'ドキュメンテーション': 'rss/format.md'
+      - 'サンプル': 'rss/sample.md'
+
+theme: readthedocs
+markdown_extensions: [fenced_code]

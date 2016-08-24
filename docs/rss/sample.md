@@ -1,5 +1,12 @@
+# サンプルフィード
+
+以下はBuildy用のサンプルフィード。
+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0"
+     xmlns:bdy="https://docs.buildy.jp/rss/format/"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Daniel Perez blog</title>
     <description>blog about programming</description>
@@ -143,3 +150,4 @@ Being used to repl like &lt;code class=&quot;highlighter-rouge&quot;&gt;ipython&
       </item>
   </channel>
 </rss>
+```

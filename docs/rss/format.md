@@ -1,7 +1,4 @@
----
-title: Buildy用RSSフィードについて
-date: 17 Aug 2016
----
+# Buildy用のフィードについて
 
 Buildyでは、RSSフィードを用いることで、
 コンテンツをアプリに同期できるようになっています。
@@ -12,53 +9,66 @@ Buildy用RSSフィードはRSS 2.0を元に作成しております。
 
 サンプルフィードは[こちら](./sample.md)をご覧ください。
 
+## XMLネームスペース
+
+RSSドキュメントが以下の２つのネームスペースを定義する必要があります。
+
+* `xmlns:bdy="https://docs.buildy.jp/rss/format/"`
+* `xmlns:content="http://purl.org/rss/1.0/modules/content/"`
+
+追加方法について、[サンプル](./sample)をご確認ください。
+
 ## RSS 2.0からBuildy用RSSフィードへの変更手順
+
+### `<item>`の変更
 
 1. 各`<item>`に`<bdy:thumbnail>`を追加
 
-  `bdy:thumbnail`は記事一覧ページで表示される画像のURLになります。
+    `bdy:thumbnail`は記事一覧ページで表示される画像のURLになります。
 
 2. 任意: 各`<item>`に`<bdy:image>`を追加
 
-  記事閲覧ページの上部に表示されるトップ画像です。
-  このタグがない場合は、`bdy:thumbnail`が利用されます。
+    記事閲覧ページの上部に表示されるトップ画像です。
+    このタグがない場合は、`bdy:thumbnail`が利用されます。
 
 3. 任意: 各`<item>`に`<bdy:category>`を追加
 
-  記事のカテゴリになります。
-  `category`が既にある場合、`category`の一番最初のカテゴリが利用されます。
-  `category`と別のカテゴリを指定したい場合、`<bdy:category>カテゴリの名前</bdy:category>`を追加してください。
+    記事のカテゴリになります。
+    `category`が既にある場合、`category`の一番最初のカテゴリが利用されます。
+    `category`と別のカテゴリを指定したい場合、`<bdy:category>カテゴリの名前</bdy:category>`を追加してください。
 
 4. 任意: 各`<item>`に`<bdy:relatedLink>`を追加
 
-  記事閲覧ページの下部に関連記事を表示する場合、`bdy:relatedLink`を追加してください。
+    記事閲覧ページの下部に関連記事を表示する場合、`bdy:relatedLink`を追加してください。
 
-  ```
-  <bdy:relatedLink title="関連記事1" link="https://example.com/path/to/article" thumbnail="https://example.com/article/image.jpg" />
-  <bdy:relatedLink title="関連記事2" link="https://example.com/path/to/other/article" thumbnail="https://example.com/article/image.jpg" />
-  ```
+```xml
+<bdy:relatedLink title="関連記事1" link="https://example.com/path/to/article" thumbnail="https://example.com/article/image.jpg" />
+<bdy:relatedLink title="関連記事2" link="https://example.com/path/to/other/article" thumbnail="https://example.com/article/image.jpg" />
+```
 
-5. 任意: `channel`の下に`<bdy:tab>`として追加
+### `<channel>`の変更
 
-  `channel`直下に`<bdy:tab>`を追加することで
-  記事一覧ページでのタブ（上部にある「トップ」「エンタメ」等）を定義することができます。
-  基本的にダッシュボードからこの設定ができるようになりますが、
-  動的にこれらのタブを変えたい場合は、以下のように設定ができます。
+1. 任意: `channel`の下に`<bdy:tab>`を追加
+
+    `channel`直下に`<bdy:tab>`を追加することで
+    記事一覧ページでのタブ（上部にある「トップ」「エンタメ」等）を定義することができます。
+    基本的にダッシュボードからこの設定ができるようになりますが、
+    動的にこれらのタブを変えたい場合は、以下のように設定ができます。
 
 
-  ```html
-    <!-- channelの下 -->
-    <bdy:tab>
-      <title>トップ</title>
-    </bdy:tab>
-    <bdy:tab>
-      <title>新規情報</title>
-      <filter operator="eq">
-        <field>bdy:category</field>
-        <value>新規情報</value>
-      </filter>
-    </bdy:tab>
-  ```
+```html
+  <!-- channelの下 -->
+  <bdy:tab>
+    <title>トップ</title>
+  </bdy:tab>
+  <bdy:tab>
+    <title>新規情報</title>
+    <filter operator="eq">
+      <field>bdy:category</field>
+      <value>新規情報</value>
+    </filter>
+  </bdy:tab>
+```
 
 
 ## ドキュメンテーション
