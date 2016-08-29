@@ -1,8 +1,11 @@
-all:
+all: build
+	@mkdocs build
+
+build:
 	@mkdocs build
 
 serve:
 	@mkdocs serve
 
-publish:
+publish: build
 	@mkdocs gh-deploy
