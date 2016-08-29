@@ -76,6 +76,8 @@
                 
                     <li><a class="toctree-l4" href="#xml">XMLネームスペース</a></li>
                 
+                    <li><a class="toctree-l4" href="#rss">RSSのページネーション</a></li>
+                
                     <li><a class="toctree-l4" href="#rss-20buildyrss">RSS 2.0からBuildy用RSSフィードへの変更手順</a></li>
                 
                     <li><a class="toctree-l4" href="#_1">ドキュメンテーション</a></li>
@@ -146,6 +148,9 @@
 <li><code>xmlns:content="http://purl.org/rss/1.0/modules/content/"</code></li>
 </ul>
 <p>追加方法について、<a href="../sample">サンプル</a>をご確認ください。</p>
+<h2 id="rss">RSSのページネーション</h2>
+<p>過去のアイテムをアプリに同期するために、Buildyでは<code>page=XX</code>のクエリパラメータでRSSにアクセスを繰り返し行ないます。
+各フィードに10件のニュースアイテムが入っている場合、<code>http://example.com/rss?page=2</code>にアクセスした際に、11〜20件目のニュースアイテムを取得できるようにしてください。</p>
 <h2 id="rss-20buildyrss">RSS 2.0からBuildy用RSSフィードへの変更手順</h2>
 <h3 id="item"><code>&lt;item&gt;</code>の変更</h3>
 <ol>
