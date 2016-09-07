@@ -5,7 +5,7 @@
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
-     xmlns:bdy="https://docs.buildy.jp/rss/format/"
+     xmlns:bdy="https://docs.buildyapp.com/rss/format/"
      xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Daniel Perez blog</title>

@@ -13,7 +13,7 @@ Buildy用RSSフィードはRSS 2.0を元に作成しております。
 
 RSSドキュメントが以下の２つのネームスペースを定義する必要があります。
 
-* `xmlns:bdy="https://docs.buildy.jp/rss/format/"`
+* `xmlns:bdy="https://docs.buildyapp.com/rss/format/"`
 * `xmlns:content="http://purl.org/rss/1.0/modules/content/"`
 
 追加方法について、[サンプル](./sample)をご確認ください。
@@ -103,7 +103,7 @@ RSSドキュメントが以下の２つのネームスペースを定義する�
 
 下の画像のアプリでは、「ニュース」、「エンタメ」、「スポーツ」などのタブが含まれています。
 
-![Tabs](https://images.buildy.jp/app_owner-1/IMG_0748-GWVjBQU.jpg)
+![Tabs](https://images.buildyapp.com/app_owner-1/IMG_0748-GWVjBQU.jpg)
 
 ##### `<bdy:tab>`タグ内の要素一覧
 
