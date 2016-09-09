@@ -149,24 +149,26 @@
 </ul>
 <p>追加方法について、<a href="../sample">サンプル</a>をご確認ください。</p>
 <h2 id="rss">RSSのページネーション</h2>
-<p>過去のアイテムをアプリに同期するために、Buildyでは<code>page=XX</code>のクエリパラメータでRSSにアクセスを繰り返し行ないます。
+<p>過去のアイテムをアプリに同期するために、Buildyでは<code>page=XX</code>のクエリパラメータでRSSにアクセスを繰り返し行ないます。<br />
 各フィードに10件のニュースアイテムが入っている場合、<code>http://example.com/rss?page=2</code>にアクセスした際に、11〜20件目のニュースアイテムを取得できるようにしてください。</p>
 <h2 id="rss-20buildyrss">RSS 2.0からBuildy用RSSフィードへの変更手順</h2>
 <h3 id="item"><code>&lt;item&gt;</code>の変更</h3>
 <ol>
 <li>
 <p>各<code>&lt;item&gt;</code>に<code>&lt;bdy:thumbnail&gt;</code>を追加</p>
-<p><code>bdy:thumbnail</code>は記事一覧ページで表示される画像のURLになります。</p>
+<p><code>bdy:thumbnail</code>は記事一覧ページで表示される画像のURLになります。<br />
+画像サイズは128 × 128 - 512 × 512pxを推奨しています。<br />
+（大きすぎると、表示がかなり遅くなってしまいます。）</p>
 </li>
 <li>
 <p>各<code>&lt;item&gt;</code>に<code>&lt;bdy:category&gt;</code>を追加</p>
-<p>記事のカテゴリになります。
-<code>category</code>が既にある場合、<code>category</code>の一番最初のカテゴリが利用されます。
+<p>記事のカテゴリになります。<br />
+<code>category</code>が既にある場合、<code>category</code>の一番最初のカテゴリが利用されます。<br />
 <code>category</code>と別のカテゴリを指定したい場合、<code>&lt;bdy:category&gt;カテゴリの名前&lt;/bdy:category&gt;</code>を追加してください。</p>
 </li>
 <li>
 <p>任意: 各<code>&lt;item&gt;</code>に<code>&lt;bdy:image&gt;</code>を追加</p>
-<p>記事閲覧ページの上部に表示されるトップ画像です。
+<p>記事閲覧ページの上部に表示されるトップ画像です。<br />
 このタグがない場合は、<code>bdy:thumbnail</code>が利用されます。</p>
 </li>
 <li>
