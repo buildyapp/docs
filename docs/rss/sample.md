@@ -36,6 +36,10 @@
       <item>
         <title>Use Atom to edit in Chrome</title>
 
+        <bdy:author
+          name="Daniel Perez"
+          thumbnail="http://tuvistavie.com/images/profile.png">
+
         <category>Projects</category>
         <category>Chrome</category>
         <category>Atom</category>
@@ -45,7 +49,7 @@
 
         <bdy:category>Projects</bdy:category>
         <bdy:thumbnail>https://cloud.githubusercontent.com/assets/1436271/12668235/c228c514-c697-11e5-8cea-e71acabcd300.png</bdy:thumbnail>
-        <bdy:image>https://cloud.githubusercontent.com/assets/1436271/12668226/afe32e26-c697-11e5-9814-2158e665f774.gif</bdy:thumbnail>
+        <bdy:image>https://cloud.githubusercontent.com/assets/1436271/12668226/afe32e26-c697-11e5-9814-2158e665f774.gif</bdy:image>
 
         <bdy:relatedLink
           title="Optional parameters and decorators in JavaScript"

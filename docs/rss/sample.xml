@@ -29,6 +29,10 @@
       <item>
         <title>Use Atom to edit in Chrome</title>
 
+        <bdy:author
+          name="Daniel Perez"
+          thumbnail="http://tuvistavie.com/images/profile.png">
+
         <category>Projects</category>
         <category>Chrome</category>
         <category>Atom</category>
