@@ -3,8 +3,8 @@
 
     
     <url>
-     <loc>None/</loc>
-     <lastmod>2016-09-09</lastmod>
+     <loc>/</loc>
+     <lastmod>2016-12-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,14 +12,14 @@
     
         
     <url>
-     <loc>None/rss/format/</loc>
-     <lastmod>2016-09-09</lastmod>
+     <loc>/rss/format/</loc>
+     <lastmod>2016-12-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
-     <loc>None/rss/sample/</loc>
-     <lastmod>2016-09-09</lastmod>
+     <loc>/rss/sample/</loc>
+     <lastmod>2016-12-22</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
